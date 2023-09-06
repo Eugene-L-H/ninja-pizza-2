@@ -16,6 +16,7 @@ $errors = [
 
 if (isset($_POST['submit'])) {
 
+  // Store user data from "Add a Pizza" form
   $formValues['email'] = $_POST['email'];
   $formValues['title'] = $_POST['title'];
   $formValues['ingredients'] = $_POST['ingredients'];
@@ -53,6 +54,20 @@ if (isset($_POST['submit'])) {
 
   }
 
+  // Check errors array for any user errors 
+  $errorPresent = false;
+  foreach ($errors as $error => $value) {
+    // If value is not an empty string, there is an error
+    if ($value !== '') {
+      $errorPresent = true;
+    }
+  }
+
+  // Redirect to index page if no errors are present in for submission
+  if (!$errorPresent) {
+    header('Location: index.php');
+  }
+
 } // end of POST check.
 
 ?>
@@ -67,21 +82,21 @@ if (isset($_POST['submit'])) {
   <form action="" class="white" action="add.php" method="POST">
 
     <label for="">Your Email</label>
-    <input type="text" name="email" value=<?php echo $formValues['email'] ?>>
+    <input type="text" name="email" value=<?php echo htmlspecialchars($formValues['email']) ?>>
     <!-- error message -->
     <div class="red-text">
       <?php echo $errors['email'] ?>
     </div>
 
     <label for="title">Pizza Title</label>
-    <input type="text" name="title" value=<?php echo $formValues['title'] ?>>
+    <input type="text" name="title" value=<?php echo htmlspecialchars($formValues['title']) ?>>
     <!-- error message -->
     <div class="red-text">
       <?php echo $errors['title'] ?>
     </div>
 
     <label for="ingredients">Ingredients (comma seperated)</label>
-    <input type="text" name="ingredients" value=<?php echo $formValues['ingredients'] ?>>
+    <input type="text" name="ingredients" value=<?php echo htmlspecialchars($formValues['ingredients']) ?>>
     <!-- error message -->
     <div class="red-text">
       <?php echo $errors['ingredients'] ?>
