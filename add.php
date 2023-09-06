@@ -1,5 +1,13 @@
 <?php
 
+// Default values for "Add a Pizza" form input values
+$formValues = [
+  'email' => '',
+  'title' => '',
+  'ingredients' => ''
+];
+
+// Will store error messages when input errors are submitted on the form
 $errors = [
   'email' => '',
   'title' => '',
@@ -7,6 +15,10 @@ $errors = [
 ];
 
 if (isset($_POST['submit'])) {
+
+  $formValues['email'] = $_POST['email'];
+  $formValues['title'] = $_POST['title'];
+  $formValues['ingredients'] = $_POST['ingredients'];
 
   // check email
   if (empty($_POST['email'])) {
@@ -55,21 +67,21 @@ if (isset($_POST['submit'])) {
   <form action="" class="white" action="add.php" method="POST">
 
     <label for="">Your Email</label>
-    <input type="text" name="email">
+    <input type="text" name="email" value=<?php echo $formValues['email'] ?>>
     <!-- error message -->
     <div class="red-text">
       <?php echo $errors['email'] ?>
     </div>
 
     <label for="title">Pizza Title</label>
-    <input type="text" name="title">
+    <input type="text" name="title" value=<?php echo $formValues['title'] ?>>
     <!-- error message -->
     <div class="red-text">
       <?php echo $errors['title'] ?>
     </div>
 
     <label for="ingredients">Ingredients (comma seperated)</label>
-    <input type="text" name="ingredients">
+    <input type="text" name="ingredients" value=<?php echo $formValues['ingredients'] ?>>
     <!-- error message -->
     <div class="red-text">
       <?php echo $errors['ingredients'] ?>
