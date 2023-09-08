@@ -35,17 +35,30 @@ mysqli_close($connection)
 
 <div class="container">
   <div class="row">
-    <?php foreach ($pizzas as $pizza) { ?>
+
+    <?php foreach ($pizzas as $pizza): ?>
 
       <div class="col s6 md3 ">
         <div class="card z-depth-0">
           <div class="card-content center">
+
+            <!-- display pizza title -->
             <h6>
               <?php echo htmlspecialchars($pizza['title']) ?>
             </h6>
-            <div>
-              <?php echo htmlspecialchars($pizza['ingredients']) ?>
-            </div>
+
+            <!-- list ingredients -->
+            <ul>
+              <?php
+              $ingredientsArray = explode(',', $pizza['ingredients']);
+
+              foreach ($ingredientsArray as $ingredient): ?>
+                <li>
+                  <?php echo htmlspecialchars($ingredient) ?>
+                </li>
+              <?php endforeach; ?>
+
+            </ul>
           </div>
           <div class="card-action right-align">
             <a href="#" class="brand-text">more info</a>
@@ -53,7 +66,8 @@ mysqli_close($connection)
         </div>
       </div>
 
-    <?php } ?>
+    <?php endforeach; ?>
+
   </div>
 </div>
 
