@@ -65,6 +65,8 @@ if (isset($_POST['submit'])) {
 
   // Redirect to index page if no errors are present in for submission
   if (!$errorPresent) {
+    // TODO: Send email, title, and ingredients to server.
+
     header('Location: index.php');
   }
 
