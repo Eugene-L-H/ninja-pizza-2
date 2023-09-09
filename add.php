@@ -1,5 +1,9 @@
 <?php
 
+// connect to database
+require 'config/db_connect.php';
+$connection = connectToDatabase();
+
 // Default values for "Add a Pizza" form input values
 $formValues = [
   'email' => '',
@@ -65,7 +69,21 @@ if (isset($_POST['submit'])) {
 
   // Redirect to index page if no errors are present in for submission
   if (!$errorPresent) {
-    // TODO: Send email, title, and ingredients to server.
+
+    // sanitize data recieved from user, before sending to database
+    $email = htmlspecialchars($email);
+    $title = htmlspecialchars($title);
+    $ingredients = htmlspecialchars($ingredients);
+
+    // send email, title, and ingredients to server.
+    $sql = "INSERT INTO pizzas (email, title, ingredients) VALUES (
+             '$email',
+             '$title',
+             '$ingredients'
+            )";
+
+    // send pizza info to database
+    $result = mysqli_query($connection, $sql);
 
     header('Location: index.php');
   }

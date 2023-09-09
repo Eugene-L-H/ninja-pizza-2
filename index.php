@@ -1,18 +1,13 @@
 <?php
 
 // connect to database
-$connection = mysqli_connect('localhost', 'eugene', '3434', 'ninja_pizza');
-
-// check connection
-if (!$connection) {
-  'Error connecting to database.' . mysqli_connect_error();
-}
+require 'config/db_connect.php';
+$connection = connectToDatabase();
 
 // query for all pizzas
 $sql = 'SELECT title, ingredients, id FROM pizzas ORDER BY created_at';
 
 // make query & get results
-
 $result = mysqli_query($connection, $sql);
 
 // store the resulting rows as an array
