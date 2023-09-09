@@ -71,11 +71,11 @@ if (isset($_POST['submit'])) {
   if (!$errorPresent) {
 
     // sanitize data recieved from user, before sending to database
-    $email = htmlspecialchars($email);
-    $title = htmlspecialchars($title);
-    $ingredients = htmlspecialchars($ingredients);
+    $email = mysqli_real_escape_string($connection, $email);
+    $title = mysqli_real_escape_string($connection, $title);
+    $ingredients = mysqli_real_escape_string($connection, $ingredients);
 
-    // send email, title, and ingredients to server.
+    // create sql
     $sql = "INSERT INTO pizzas (email, title, ingredients) VALUES (
              '$email',
              '$title',
@@ -83,9 +83,16 @@ if (isset($_POST['submit'])) {
             )";
 
     // send pizza info to database
-    $result = mysqli_query($connection, $sql);
+    if (mysqli_query($connection, $sql)) {
 
-    header('Location: index.php');
+      // success, redirect to index page
+      header('Location: index.php');
+    } else {
+
+      // error
+      echo 'Error connecting to database.' . mysqli_error($connection);
+    }
+
   }
 
 } // end of POST check.
