@@ -32,8 +32,8 @@ mysqli_close($connection)
   <div class="row">
 
     <?php foreach ($pizzas as $pizza): ?>
-
       <div class="col s6 md3 ">
+
         <div class="card z-depth-0">
           <div class="card-content center">
 
@@ -56,7 +56,7 @@ mysqli_close($connection)
             </ul>
           </div>
           <div class="card-action right-align">
-            <a href="#" class="brand-text">more info</a>
+            <a href="more_info.php?id=<?php echo $pizza['id'] ?>" class="brand-text">more info</a>
           </div>
         </div>
       </div>
