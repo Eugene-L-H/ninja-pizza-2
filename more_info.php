@@ -4,18 +4,37 @@
 require 'config/db_connect.php';
 $connection = connectToDatabase();
 
-// get pizza id from url
-$pizza_id = $_GET['id'];
+// if post request is recieved requesting deletion of pizza
+if (isset($_POST['delete'])) {
+  print_r($_POST);
+  // query pizza in database to be deleted
+  $sql = "DELETE FROM `pizzas` WHERE `id` = $_POST[delete_pizza_id]";
 
-// query for pizza
-$sql = "SELECT * FROM `pizzas` WHERE `id` = $pizza_id";
+  // send query, requesting deletion, to database
+  if (mysqli_query($connection, $sql)) {
 
-$result = mysqli_query($connection, $sql);
+    // success
+    header('Location: index.php');
 
-$pizza = mysqli_fetch_all($result, MYSQLI_ASSOC);
-$pizza = $pizza[0];
+  } else {
+    // error
+    echo 'Error connecting to database.' . mysqli_error($connection);
+  }
 
-print_r($pizza);
+} else {
+
+  // get pizza id from url
+  $pizza_id = $_GET['id'];
+
+  // query for pizza
+  $sql = "SELECT * FROM `pizzas` WHERE `id` = $pizza_id";
+
+  $result = mysqli_query($connection, $sql);
+
+  $pizza = mysqli_fetch_all($result, MYSQLI_ASSOC);
+  $pizza = $pizza[0];
+
+}
 
 ?>
 
@@ -24,7 +43,7 @@ print_r($pizza);
 
 <?php include('templates/header.php') ?>
 
-<div class="col s6 md3 ">
+<form class="white" action="more_info.php" method="POST">
   <div class="card z-depth-0">
     <div class="card-content center">
 
@@ -46,12 +65,18 @@ print_r($pizza);
 
       </ul>
     </div>
-    <div class="card-action right-align">
+
+    <div class="right-align">
       Created by:
-      <?php echo $pizza['email'] ?>
+      <?php echo $pizza['email'] ?>, @
+      <?php echo $pizza['created_at'] ?>
+    </div>
+    <input type="hidden" name="delete_pizza_id" value=<?php echo $pizza_id ?>>
+    <div class="center">
+      <input type="submit" name="delete" value="Delete Pizza" class="btn brand z-depth-0">
     </div>
   </div>
-</div>
+</form>
 
 
 <?php include('templates/footer.php') ?>
