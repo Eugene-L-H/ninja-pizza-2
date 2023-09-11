@@ -12,13 +12,6 @@ if (isset($_POST['delete'])) {
 
   // send query, requesting deletion, to database
   if (mysqli_query($connection, $sql)) {
-
-    // free result from memory
-    mysqli_free_result($result);
-
-    // close connection
-    mysqli_close($connection);
-
     // success
     header('Location: index.php');
   } else {
@@ -84,6 +77,7 @@ if (isset($_POST['delete'])) {
       </h6>
 
       <!-- list ingredients -->
+      <div class="center">Ingredients:</div>
       <ul>
         <?php
         $ingredientsArray = explode(',', $pizza['ingredients']);
