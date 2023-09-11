@@ -84,11 +84,9 @@ if (isset($_POST['submit'])) {
 
     // send pizza info to database
     if (mysqli_query($connection, $sql)) {
-
       // success, redirect to index page
       header('Location: index.php');
     } else {
-
       // error
       echo 'Error connecting to database.' . mysqli_error($connection);
     }
@@ -106,7 +104,7 @@ if (isset($_POST['submit'])) {
 <section class="container grey-text">
   <h4 class="center">Add a Pizza</h4>
 
-  <form action="" class="white" action="add.php" method="POST">
+  <form class="white" action="add.php" method="POST">
 
     <label for="">Your Email</label>
     <input type="text" name="email" value=<?php echo htmlspecialchars($formValues['email']) ?>>

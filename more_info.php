@@ -4,7 +4,7 @@
 require 'config/db_connect.php';
 $connection = connectToDatabase();
 
-// if post request is recieved requesting deletion of pizza
+// if POST request is recieved requesting deletion of pizza
 if (isset($_POST['delete'])) {
   print_r($_POST);
   // query pizza in database to be deleted
@@ -13,26 +13,57 @@ if (isset($_POST['delete'])) {
   // send query, requesting deletion, to database
   if (mysqli_query($connection, $sql)) {
 
+    // free result from memory
+    mysqli_free_result($result);
+
+    // close connection
+    mysqli_close($connection);
+
     // success
     header('Location: index.php');
-
   } else {
     // error
     echo 'Error connecting to database.' . mysqli_error($connection);
   }
 
+  // GET request from user, display more information on pizza 
 } else {
 
-  // get pizza id from url
-  $pizza_id = $_GET['id'];
+  if (isset($_GET['id'])) {
 
-  // query for pizza
-  $sql = "SELECT * FROM `pizzas` WHERE `id` = $pizza_id";
+    // get pizza id from url
+    $pizza_id = mysqli_real_escape_string($connection, $_GET['id']);
 
-  $result = mysqli_query($connection, $sql);
+    // query for pizza
+    $sql = "SELECT * FROM `pizzas` WHERE `id` = $pizza_id";
+    $result = mysqli_query($connection, $sql);
 
-  $pizza = mysqli_fetch_all($result, MYSQLI_ASSOC);
-  $pizza = $pizza[0];
+    // get all data for selected pizza
+    if ($result) {
+      $pizza = mysqli_fetch_all($result, MYSQLI_ASSOC);
+      // contains all the info for pizza to be displayed
+      $pizza = $pizza[0];
+
+      // If pizza with that id does not exist, redirect to home page
+      if ($pizza === null)
+        header('Location: index.php');
+
+      // free result from memory
+      mysqli_free_result($result);
+
+      // close connection
+      mysqli_close($connection);
+
+    } else {
+      // error
+      echo 'Error connecting to database.' . mysqli_error($connection);
+    }
+
+  } else {
+    // redirect to home page if no pizza id is present in url
+    header('Location: index.php');
+  }
+
 
 }
 
@@ -73,7 +104,8 @@ if (isset($_POST['delete'])) {
     </div>
     <input type="hidden" name="delete_pizza_id" value=<?php echo $pizza_id ?>>
     <div class="center">
-      <input type="submit" name="delete" value="Delete Pizza" class="btn brand z-depth-0">
+      <input type="submit" name="delete" value="Delete Pizza" class="btn brand z-depth-0"
+        onclick="return confirm('This is permanent! Are you sure you want to delete?')">
     </div>
   </div>
 </form>
